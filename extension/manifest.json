@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Manufacturing & Landed Cost Estimator",
+  "version": "0.2.0",
+  "description": "Estimate manufacturing, landed, marketplace, and gross-margin costs using 134 models and a 2,648-product reference catalog.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "downloads",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Estimate manufacturing cost"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "benchmarks.json",
+        "product_estimates.json"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

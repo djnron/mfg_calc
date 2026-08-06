@@ -1,0 +1,29 @@
+name: New or corrected cost model
+description: Propose a benchmark archetype or correction
+title: "[Cost model]: "
+labels: [data, enhancement]
+body:
+  - type: input
+    id: archetype
+    attributes:
+      label: Product archetype
+    validations:
+      required: true
+  - type: textarea
+    id: construction
+    attributes:
+      label: Construction and materials
+    validations:
+      required: true
+  - type: textarea
+    id: range
+    attributes:
+      label: Proposed low, base, and high costs
+      description: Include quantity, currency, production region, date, and Incoterm when known.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and sources
+      description: Do not disclose confidential information without permission.

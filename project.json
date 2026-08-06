@@ -1,0 +1,9 @@
+{
+  "name": "manufacturing-cost-estimator",
+  "version": "0.2.0",
+  "description": "Open-source Chrome extension and dataset for estimating manufacturing, landed, and e-commerce selling costs.",
+  "license": "MIT",
+  "data_license": "CC-BY-4.0",
+  "repository": "TO_BE_SET_AFTER_GITHUB_CONNECTION",
+  "release_date": "2026-08-05"
+}

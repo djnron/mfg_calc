@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-08-05T12:10:00-07:00",
+  "total_products": 2648,
+  "estimated_products": 2648,
+  "platform_counts": {
+    "Amazon": 1000,
+    "Etsy": 20,
+    "Shopify": 1623,
+    "AliExpress": 5
+  },
+  "confidence_counts": {
+    "Low": 1969,
+    "Medium": 679
+  },
+  "status_counts": {
+    "Estimated": 2633,
+    "Digital marginal cost only": 15
+  },
+  "benchmark_count": 134,
+  "category_counts": {
+    "Footwear": 185,
+    "Apparel": 1056,
+    "Home": 131,
+    "Electronics": 111,
+    "Beauty": 41,
+    "Tools": 94,
+    "Food": 3,
+    "Jewelry": 163,
+    "Crafts": 14,
+    "Generic": 297,
+    "Sports": 20,
+    "Stationery": 26,
+    "Toys": 19,
+    "Accessories": 34,
+    "Bags": 60,
+    "Bicycles": 222,
+    "Media": 3,
+    "Pet": 10,
+    "Digital": 15,
+    "Automotive": 4,
+    "Snow Sports": 140
+  }
+}
