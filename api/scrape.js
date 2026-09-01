@@ -43,6 +43,32 @@ function decode(s) {
   return s.replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/&#(\d+);/g,(_,c)=>String.fromCharCode(c));
 }
 
+const PRICE_KEYS = /^(?:price|salePrice|regularPrice|currentPrice|listPrice|basePrice|finalPrice|offerPrice|discountedPrice|amount)$/i;
+
+function extractScriptPrice(html) {
+  // Collect all price-like values from every <script> block
+  const candidates = [];
+  for (const m of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/gi)) {
+    const t = m[1];
+    if (!t.includes("price") && !t.includes("Price") && !t.includes("amount")) continue;
+    for (const hit of t.matchAll(/"([^"]{4,40})"\s*:\s*"?([\d.]+)"?/g)) {
+      if (PRICE_KEYS.test(hit[1])) {
+        const v = parseFloat(hit[2]);
+        if (v > 1 && v < 100000) candidates.push(v);
+      }
+    }
+  }
+  return mostCommon(candidates);
+}
+
+function mostCommon(arr) {
+  if (!arr.length) return null;
+  const counts = {};
+  for (const v of arr) counts[v] = (counts[v] || 0) + 1;
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+  return top ? parseFloat(top[0]) : null;
+}
+
 function parseProduct(html, url) {
   const result = { url, title: "", price: null, description: "" };
 
@@ -82,18 +108,24 @@ function parseProduct(html, url) {
     if (m) result.description = decode(m[1]);
   }
 
-  // Price fallback: first plausible dollar amount in the HTML
+  // Microdata itemprop=price
   if (!result.price) {
-    for (const pattern of [
-      /"price":\s*"?([\d.]+)"?/,
-      /itemprop=["']price["'][^>]+content=["']([\d.]+)["']/i,
-      /\$([\d,]+\.\d{2})\b/,
-    ]) {
-      const m = html.match(pattern);
-      if (m) {
-        const v = parseFloat(m[1].replace(/,/g, ""));
-        if (v > 0 && v < 100000) { result.price = v; break; }
-      }
+    const m = html.match(/itemprop=["']price["'][^>]+content=["']([\d.]+)["']/i)
+      || html.match(/content=["']([\d.]+)["'][^>]+itemprop=["']price["']/i);
+    if (m) result.price = parseFloat(m[1]) || null;
+  }
+
+  // __NEXT_DATA__ (Next.js) and general script-tag JSON price fields
+  if (!result.price) {
+    result.price = extractScriptPrice(html);
+  }
+
+  // Last resort: first dollar amount that looks like a product price
+  if (!result.price) {
+    const m = html.match(/\$\s*([\d,]+\.\d{2})\b/);
+    if (m) {
+      const v = parseFloat(m[1].replace(/,/g, ""));
+      if (v > 0 && v < 100000) result.price = v;
     }
   }
 
