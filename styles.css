@@ -130,10 +130,11 @@ button.primary:hover { background: #1a44b8; }
 /* URL scrape row */
 .url-row { position: relative; display: flex; align-items: center; gap: 8px; margin-top: 5px; }
 .url-row input { margin-top: 0; flex: 1; }
-.scrape-status { font-size: 11px; white-space: nowrap; min-width: 90px; }
+.scrape-status { font-size: 11px; min-width: 90px; }
 .scrape-status.loading { color: #647087; }
 .scrape-status.ok { color: #2a6e2a; font-weight: 600; }
-.scrape-status.err { color: #b94a48; }
+.scrape-status.warn { color: #8a6000; font-weight: 600; }
+.scrape-status.err { color: #b94a48; font-weight: 600; }
 
 .catalog-badge {
   font-size: 11px;

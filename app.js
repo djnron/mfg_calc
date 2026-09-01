@@ -216,19 +216,33 @@ async function scrapeUrl(url) {
     const data = await r.json();
     if (!r.ok || data.error) throw new Error(data.error || "scrape failed");
 
-    if (data.title) $("title").value = data.title;
-    if (data.price) $("retailPrice").value = data.price.toFixed(2);
+    const hasTitle = !!data.title;
+    const hasPrice = data.price != null;
 
-    status.textContent = "✓ Found";
+    if (!hasTitle && !hasPrice) {
+      status.textContent = "⚠ Page loaded but no product data found";
+      status.className = "scrape-status warn";
+      return;
+    }
+
+    if (data.title) $("title").value = data.title;
+    if (hasPrice) $("retailPrice").value = data.price.toFixed(2);
+
+    if (hasTitle && hasPrice) {
+      status.textContent = "✓ Title + price found";
+    } else if (hasTitle) {
+      status.textContent = "✓ Title found — enter price manually";
+    } else {
+      status.textContent = "✓ Price found — enter title manually";
+    }
     status.className = "scrape-status ok";
 
-    // Now try to match catalog and calculate
     catalogMatch = findCatalogMatch(data.title, url);
     if (catalogMatch) applyCatalogMatch(catalogMatch);
     else if (data.title) chooseBenchmark(`${data.title} ${data.description || ""}`);
     calculate();
   } catch (err) {
-    status.textContent = "✗ Couldn't reach page";
+    status.textContent = `✗ ${err.message || "Couldn't reach page"}`;
     status.className = "scrape-status err";
     console.warn("Scrape failed:", err.message);
   }
