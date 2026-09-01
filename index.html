@@ -22,11 +22,14 @@
       <div class="left-col">
         <section class="card">
           <h2>Product</h2>
+          <label>Product URL — paste to autofill
+            <div class="url-row">
+              <input id="pageUrl" type="url" placeholder="https://amazon.com/dp/… or any product page"/>
+              <span id="scrape-status" class="scrape-status"></span>
+            </div>
+          </label>
           <label>Product title
             <input id="title" placeholder="e.g. Ceramic pour-over coffee dripper"/>
-          </label>
-          <label>Product URL <span class="optional">(optional — used for catalog matching)</span>
-            <input id="pageUrl" type="url" placeholder="https://…"/>
           </label>
           <div class="grid2">
             <label>Retail price ($)

@@ -207,13 +207,50 @@ function exportCSV() {
   URL.revokeObjectURL(url);
 }
 
+async function scrapeUrl(url) {
+  const status = $("scrape-status");
+  status.textContent = "Fetching…";
+  status.className = "scrape-status loading";
+  try {
+    const r = await fetch(`/api/scrape?url=${encodeURIComponent(url)}`);
+    const data = await r.json();
+    if (!r.ok || data.error) throw new Error(data.error || "scrape failed");
+
+    if (data.title) $("title").value = data.title;
+    if (data.price) $("retailPrice").value = data.price.toFixed(2);
+
+    status.textContent = "✓ Found";
+    status.className = "scrape-status ok";
+
+    // Now try to match catalog and calculate
+    catalogMatch = findCatalogMatch(data.title, url);
+    if (catalogMatch) applyCatalogMatch(catalogMatch);
+    else if (data.title) chooseBenchmark(`${data.title} ${data.description || ""}`);
+    calculate();
+  } catch (err) {
+    status.textContent = "✗ Couldn't reach page";
+    status.className = "scrape-status err";
+    console.warn("Scrape failed:", err.message);
+  }
+}
+
+let scrapeTimer;
+$("pageUrl").addEventListener("input", () => {
+  clearTimeout(scrapeTimer);
+  const val = $("pageUrl").value.trim();
+  if (!val) { $("scrape-status").textContent = ""; $("scrape-status").className = "scrape-status"; return; }
+  try { new URL(val); } catch (_) { return; }
+  // Small debounce so paste triggers once, not per character
+  scrapeTimer = setTimeout(() => scrapeUrl(val), 400);
+});
+
 $("category").addEventListener("change", () => { catalogMatch = null; rebuildArchetypes(); calculate(); });
 $("archetype").addEventListener("change", () => { catalogMatch = null; calculate(); });
 $("match").addEventListener("click", matchCatalog);
 $("calculate").addEventListener("click", calculate);
 $("export").addEventListener("click", exportCSV);
 document.querySelectorAll("input,select").forEach(el => {
-  if (el.id === "category" || el.id === "confidenceOverride") return;
+  if (el.id === "category" || el.id === "confidenceOverride" || el.id === "pageUrl") return;
   el.addEventListener("change", calculate);
 });
 
