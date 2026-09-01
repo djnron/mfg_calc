@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Manufacturing Cost Estimator</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1>Manufacturing Cost Estimator</h1>
+        <p>Factory cost, landed cost, fees, and margin — 134 cost models &amp; 2,648-product reference catalog.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+
+      <div class="left-col">
+        <section class="card">
+          <h2>Product</h2>
+          <label>Product title
+            <input id="title" placeholder="e.g. Ceramic pour-over coffee dripper"/>
+          </label>
+          <label>Product URL <span class="optional">(optional — used for catalog matching)</span>
+            <input id="pageUrl" type="url" placeholder="https://…"/>
+          </label>
+          <div class="grid2">
+            <label>Retail price ($)
+              <input id="retailPrice" type="number" min="0" step="0.01" placeholder="29.99"/>
+            </label>
+            <label>Category
+              <select id="category"></select>
+            </label>
+          </div>
+          <label>Closest product archetype
+            <select id="archetype"></select>
+          </label>
+          <div class="grid2">
+            <label>Order quantity
+              <input id="quantity" type="number" min="1" value="1000"/>
+            </label>
+            <label>Confidence override
+              <select id="confidenceOverride">
+                <option value="">Model default</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+            </label>
+          </div>
+          <button id="match" class="match-btn">Match to catalog</button>
+        </section>
+
+        <section class="card">
+          <h2>Editable assumptions</h2>
+          <div class="grid3">
+            <label>Factory multiplier
+              <input id="factoryMultiplier" type="number" value="1" step="0.05"/>
+            </label>
+            <label>Packaging multiplier
+              <input id="packagingMultiplier" type="number" value="1" step="0.05"/>
+            </label>
+            <label>Freight multiplier
+              <input id="freightMultiplier" type="number" value="1" step="0.05"/>
+            </label>
+          </div>
+          <div class="grid3">
+            <label>Duty %
+              <input id="dutyRate" type="number" value="5" step="0.1"/>
+            </label>
+            <label>Marketplace fee %
+              <input id="marketplaceRate" type="number" value="15" step="0.1"/>
+            </label>
+            <label>Fulfillment / unit ($)
+              <input id="fulfillment" type="number" value="4.25" step="0.01"/>
+            </label>
+          </div>
+          <div class="grid2">
+            <label>Returns allowance %
+              <input id="returnsRate" type="number" value="5" step="0.1"/>
+            </label>
+            <label>Other cost / unit ($)
+              <input id="otherCost" type="number" value="0" step="0.01"/>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div class="right-col">
+        <section class="card results">
+          <div class="row between">
+            <h2>Estimate</h2>
+            <span id="confidence" class="pill">—</span>
+          </div>
+          <div id="catalog-badge" class="catalog-badge hidden"></div>
+          <div class="metric">
+            <span>Factory cost</span>
+            <strong id="factoryResult">—</strong>
+          </div>
+          <div class="metric">
+            <span>Landed cost</span>
+            <strong id="landedResult">—</strong>
+          </div>
+          <div class="metric">
+            <span>Total selling cost</span>
+            <strong id="sellingCostResult">—</strong>
+          </div>
+          <div class="metric">
+            <span>Gross profit / unit</span>
+            <strong id="profitResult">—</strong>
+          </div>
+          <div class="metric">
+            <span>Gross margin</span>
+            <strong id="marginResult">—</strong>
+          </div>
+          <p id="notes" class="notes"></p>
+          <div class="row cta-row">
+            <button id="calculate" class="primary">Calculate</button>
+            <button id="export">Export CSV</button>
+          </div>
+        </section>
+
+        <section class="card disclaimer">
+          <h3>Important limitations</h3>
+          <p>These are benchmark-based estimates, not supplier quotations. Validate with RFQs, a bill of materials, current freight rates, and actual tariff classifications before any purchasing or investment decision.</p>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>Open-source &middot; <a href="https://github.com/djnron/mfg_calc" target="_blank" rel="noopener">GitHub</a> &middot; MIT License &middot; Data: CC BY 4.0</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
