@@ -51,15 +51,64 @@ function rebuildArchetypes() {
   ).join("");
 }
 
+const STOPWORDS = new Set([
+  "the","and","for","with","from","that","this","are","was","have","has","been","will",
+  "can","your","our","all","not","but","its","they","their","you","more","than","into",
+  "about","also","some","when","each","over","such","these","after","other","very","most",
+  "both","many","then","make","just","like","well","good","new","use","get","set","per",
+  "pack","kit","pcs","piece","pieces","lot","buy","item","items","product","products",
+  "small","large","big","mini","micro","nano","plus","pro","max","ultra","super","best",
+  "size","color","black","white","blue","red","green","pink","grey","gray","brown",
+]);
+function tokenize(s) {
+  return (s || "").toLowerCase().split(/\W+/).filter(w => w.length > 2 && !STOPWORDS.has(w));
+}
+
 function chooseBenchmark(text) {
-  text = (text || "").toLowerCase();
-  let best = benchmarks[0], score = -1;
+  const inputTokens = new Set(tokenize(text));
+  if (!inputTokens.size) return;
+  const inputText = (text || "").toLowerCase();
+
+  let best = null, bestScore = -1;
+
   for (const row of benchmarks) {
-    const source = `${row.category} ${row.product_archetype} ${row.construction_summary} ${row.keywords || ""}`.toLowerCase();
-    const words = source.split(/\W+/).filter(w => w.length > 3);
-    const s = words.reduce((sum, w) => sum + (text.includes(w) ? 1 : 0), 0);
-    if (s > score) { best = row; score = s; }
+    const archetypeTokens = new Set(tokenize(row.product_archetype));
+    const categoryTokens  = new Set(tokenize(row.category));
+    const keywordTokens   = new Set(tokenize(row.keywords));
+    const bodyTokens      = new Set(tokenize(row.construction_summary));
+    let score = 0;
+
+    // Input words hitting benchmark fields (left-to-right)
+    for (const w of inputTokens) {
+      if (archetypeTokens.has(w))     score += 5;
+      else if (keywordTokens.has(w))  score += 3;
+      else if (categoryTokens.has(w)) score += 2;
+      else if (bodyTokens.has(w))     score += 1;
+    }
+
+    // Archetype and keyword words hitting input (right-to-left)
+    for (const w of archetypeTokens) if (inputTokens.has(w)) score += 3;
+    for (const w of keywordTokens)   if (inputTokens.has(w) && !archetypeTokens.has(w)) score += 2;
+
+    // Phrase bonuses: full archetype name or multi-word keyword phrases
+    if (row.product_archetype && inputText.includes(row.product_archetype.toLowerCase())) score += 20;
+    for (const phrase of (row.keywords || "").split(/[\s,;]+/).reduce((acc, _, i, arr) => {
+      if (i < arr.length - 1) acc.push(arr.slice(i, i + 2).join(" "));
+      return acc;
+    }, [])) {
+      if (phrase.length > 4 && inputText.includes(phrase)) score += 8;
+    }
+
+    if (score > bestScore) { best = row; bestScore = score; }
   }
+
+  // No meaningful signal → fall back to Generic bucket
+  if (bestScore === 0) {
+    best = benchmarks.find(r => r.category === "Generic" && r.product_archetype.includes("Assembled"))
+      || benchmarks.find(r => r.category === "Generic")
+      || benchmarks[0];
+  }
+
   $("category").value = best.category;
   rebuildArchetypes();
   $("archetype").value = best.product_archetype;
