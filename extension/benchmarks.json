@@ -1061,7 +1061,7 @@
     "reference_quantity": 1000,
     "confidence": "Low",
     "notes": "Material, size, tooling, coatings, and set count affect cost.",
-    "keywords": "kitchen utensil spatula tongs cookware houseware"
+    "keywords": "kitchen utensil spatula tongs cookware houseware cutting board colander strainer peeler grater whisk ladle serving spoon"
   },
   {
     "category": "Home",
@@ -1251,7 +1251,7 @@
     "reference_quantity": 1000,
     "confidence": "Low",
     "notes": "Sensor accuracy, calibration, enclosure, and certification affect cost.",
-    "keywords": "digital gauge meter sensor thermometer pressure gauge"
+    "keywords": "digital gauge meter sensor thermometer pressure gauge hygrometer multimeter moisture meter scale caliper"
   },
   {
     "category": "Electronics",
@@ -1308,7 +1308,7 @@
     "reference_quantity": 500,
     "confidence": "Low",
     "notes": "Motor, battery, attachments, safety testing, and warranty affect cost.",
-    "keywords": "epilator shaver trimmer hair dryer grooming device"
+    "keywords": "epilator shaver trimmer hair dryer grooming device curling iron straightener flat iron beard trimmer electric razor"
   },
   {
     "category": "Electronics",
@@ -1327,7 +1327,7 @@
     "reference_quantity": 1000,
     "confidence": "Low",
     "notes": "Functionality, chipset, certification, and complexity vary widely.",
-    "keywords": "computer accessory mouse keyboard hub webcam docking"
+    "keywords": "computer accessory mouse keyboard hub webcam docking station laptop stand monitor arm usb hub thunderbolt kvm switch"
   },
   {
     "category": "Electronics",
@@ -1384,7 +1384,7 @@
     "reference_quantity": 500,
     "confidence": "Low",
     "notes": "Sensor, optics, wireless chipset, cloud/software, certifications, and warranty drive cost.",
-    "keywords": "security camera smart home camera doorbell"
+    "keywords": "security camera smart home camera doorbell ring nest thermostat smart plug motion sensor alarm system cctv ip camera"
   },
   {
     "category": "Electronics",
@@ -1422,7 +1422,7 @@
     "reference_quantity": 300,
     "confidence": "Low",
     "notes": "Power, motor/heater, safety testing, tooling, and freight affect cost.",
-    "keywords": "appliance blender coffee maker vacuum fan humidifier"
+    "keywords": "appliance blender coffee maker vacuum fan humidifier oven air fryer toaster convection countertop microwave instant pot pressure cooker slow cooker rice cooker food processor juicer mixer stand mixer steamer dehydrator griddle waffle maker kettle espresso machine"
   },
   {
     "category": "Tools",
